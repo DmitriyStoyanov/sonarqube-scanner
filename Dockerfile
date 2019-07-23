@@ -11,9 +11,13 @@ RUN curl --insecure -o ./sonarscanner.zip -L https://binaries.sonarsource.com/Di
     SONAR_RUNNER_HOME=/opt/sonar-scanner && \
     export PATH=$PATH:$SONAR_RUNNER_HOME/bin && \
     sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' $SONAR_RUNNER_HOME/bin/sonar-scanner && \
-	rm -rf $SONAR_RUNNER_HOME/jre && \
-	echo export SONAR_RUNNER_HOME=$SONAR_RUNNER_HOME >> /etc/profile
+	rm -rf $SONAR_RUNNER_HOME/jre
 
 FROM openjdk:8-alpine
+
+ENV SONAR_RUNNER_HOME /opt/sonar-scanner
+ENV PATH $SONAR_RUNNER_HOME/bin:$PATH
+
 COPY --from=builder /opt/sonar-scanner /opt/sonar-scanner
-COPY --from=builder /etc/profile /etc/profile
+
+RUN apk add --no-cache nodejs nodejs-npm
