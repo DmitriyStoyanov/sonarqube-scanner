@@ -1,4 +1,4 @@
-FROM openjdk:8-alpine AS builder
+FROM openjdk:13-alpine AS builder
 
 RUN apk add --no-cache curl unzip
 
@@ -13,7 +13,7 @@ RUN curl --insecure -o ./sonarscanner.zip -L https://binaries.sonarsource.com/Di
     sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' $SONAR_RUNNER_HOME/bin/sonar-scanner && \
 	rm -rf $SONAR_RUNNER_HOME/jre
 
-FROM openjdk:8-alpine
+FROM openjdk:13-alpine
 
 ENV SONAR_RUNNER_HOME /opt/sonar-scanner
 ENV PATH $SONAR_RUNNER_HOME/bin:$PATH
