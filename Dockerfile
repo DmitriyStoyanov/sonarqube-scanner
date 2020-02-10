@@ -3,11 +3,11 @@ FROM openjdk:8-alpine AS builder
 RUN apk add --no-cache curl unzip
 
 WORKDIR /opt
-
-RUN curl --insecure -o ./sonarscanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-3.3.0.1492-linux.zip && \
+ARG SONAR_SCANNER_VER="4.2.0.1873"
+RUN curl --insecure -o ./sonarscanner.zip -L https://binaries.sonarsource.com/Distribution/sonar-scanner-cli/sonar-scanner-cli-${SONAR_SCANNER_VER}-linux.zip && \
     unzip sonarscanner.zip && \
     rm sonarscanner.zip && \
-    mv sonar-scanner-3.3.0.1492-linux sonar-scanner && \
+    mv sonar-scanner-${SONAR_SCANNER_VER}-linux sonar-scanner && \
     SONAR_RUNNER_HOME=/opt/sonar-scanner && \
     export PATH=$PATH:$SONAR_RUNNER_HOME/bin && \
     sed -i 's/use_embedded_jre=true/use_embedded_jre=false/g' $SONAR_RUNNER_HOME/bin/sonar-scanner && \
